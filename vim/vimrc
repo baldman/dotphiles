@@ -1,28 +1,47 @@
-"
-" dotphiles : https://github.com/dotphiles/dotphiles
-"
-" Setup vim and load required plugins before dotvim
-"
-" Authors:
-"   Ben O'Hara <bohara@gmail.com>
-"
+syntax on
 
-" Call dotvim
-source ~/.vim/dotvim.vim
+set number
+set expandtab
+set tabstop=4
+set shiftwidth=4
+set autoindent
 
-if has("user_commands")
-  set nocompatible
-  filetype off
-  set rtp+=~/.vim/bundle/vundle/
-  call vundle#rc()
-  "let g:vundles=['general', 'git', 'hg', 'programming', 'completion', 'ruby', 'python', 'misc']
-  let g:vundles=['general', 'programming']
-  let g:neocomplcache_enable_at_startup = 1
-  " Load 'vundles'
-  source ~/.vim/vundles.vim
-  " Add extra bundles here...
-  " Bundle 'reponame'
-endif
 
-" Customize to your needs...
+set autoread
+set colorcolumn=121
 
+
+call plug#begin()
+
+Plug 'preservim/vim-markdown'
+" Plug '/usr/share/fb-editor-support/nvim', {'as': 'meta.nvim'}
+Plug 'nvim-lualine/lualine.nvim'
+Plug 'arcticicestudio/nord-vim'
+Plug 'tpope/vim-dadbod'
+Plug 'kristijanhusak/vim-dadbod-ui'
+Plug 'preservim/nerdtree'
+
+call plug#end()
+
+" Colorscheme
+colorscheme nord
+
+" Markdown config
+let g:vim_markdown_folding_disabled = 1
+
+" Start NERDTree when Vim starts with a directory argument.
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') |
+    \ execute 'NERDTree' argv()[0] | wincmd p  | enew | wincmd h | execute 'cd '.argv()[0] | endif
+
+" Exit Vim if NERDTree is the only window remaining in the only tab.
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+" Lualine setup
+lua << END
+require('lualine').setup {
+    options = {
+        theme = 'Tomorrow'
+    }  
+}
+END

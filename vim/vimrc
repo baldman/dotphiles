@@ -7,7 +7,11 @@ set shiftwidth=4
 set autoindent
 
 
+" Autoread and read on focus gained
 set autoread
+au FocusGained,BufEnter * :checktime
+
+
 set colorcolumn=121
 
 
@@ -20,6 +24,7 @@ Plug 'arcticicestudio/nord-vim'
 Plug 'tpope/vim-dadbod'
 Plug 'kristijanhusak/vim-dadbod-ui'
 Plug 'preservim/nerdtree'
+Plug 'tmux-plugins/vim-tmux-focus-events'
 
 call plug#end()
 
@@ -36,6 +41,15 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in
 
 " Exit Vim if NERDTree is the only window remaining in the only tab.
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+" Open the existing NERDTree on each new tab.
+autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif
+
+
+" >>> Key Bindings
+
+" Toggle NERDTree by Ctrl+t
+nnoremap <C-t> :NERDTreeToggle<CR>
 
 " Lualine setup
 lua << END
